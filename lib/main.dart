@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:medminder/screens/firstscreen.dart';
 import 'pages/home.dart';
+import 'widgets/navbar.dart';
 
 void main() {
   runApp(const MyApp());
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const Firstscreen(),
         '/home': (context) => const Home(),
+        '/nav': (context) => const Navbar(),
       },
       debugShowCheckedModeBanner: false,
     );
