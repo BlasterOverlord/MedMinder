@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:medminder/screens/firstscreen.dart';
-import 'pages/home.dart';
+import 'package:medminder/auth/firstscreen.dart';
+import 'widgets/navbar.dart';
+import 'package:medminder/auth/authListener.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -31,7 +38,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => const Firstscreen(),
-        '/home': (context) => const Home(),
+        '/nav': (context) => const Navbar(''),
       },
       debugShowCheckedModeBanner: false,
     );
