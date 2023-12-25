@@ -162,7 +162,7 @@ class _Signin extends State<Signin> {
                               //   ),
                               // );
                               Navigator.pushNamedAndRemoveUntil(
-                                  context, '/home', (route) => false);
+                                  context, '/nav', (route) => false);
                             } else if (!rememberPassword) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(

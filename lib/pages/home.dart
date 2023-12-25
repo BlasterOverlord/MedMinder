@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../widgets/navbar.dart';
 import '../widgets/calendar.dart';
 
 class Home extends StatelessWidget {
@@ -33,7 +32,6 @@ class Home extends StatelessWidget {
         child: const Icon(Icons.add),
         onPressed: () {},
       ),
-      bottomNavigationBar: const Navbar(),
     );
   }
 }

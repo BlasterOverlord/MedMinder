@@ -193,7 +193,7 @@ class _Signup extends State<Signup> {
                               //   ),
                               // );
                               Navigator.pushNamedAndRemoveUntil(
-                                  context, '/home', (route) => false);
+                                  context, '/nav', (route) => false);
                             } else if (!agreePersonalData) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
