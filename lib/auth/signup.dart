@@ -1,19 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:icons_plus/icons_plus.dart';
-import 'package:medminder/screens/signin.dart';
+import 'package:medminder/auth/signin.dart';
+import 'package:medminder/model/user.dart';
+import 'package:medminder/database/databaseService.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import '../widgets/custom.dart';
 
 class Signup extends StatefulWidget {
-  const Signup({super.key});
+  final togglePage;
+  const Signup({super.key, this.togglePage});
 
   @override
   State<Signup> createState() => _Signup();
 }
 
 class _Signup extends State<Signup> {
+  var nameController = TextEditingController();
+  var emailController = TextEditingController();
+  var passwordController = TextEditingController();
+  bool loadingVisible = false;
+
   final _formSignupKey = GlobalKey<FormState>();
   bool agreePersonalData = true;
+  DatabaseService _databaseService = DatabaseService();
+
   @override
   Widget build(BuildContext context) {
     return Custom(
@@ -44,7 +55,7 @@ class _Signup extends State<Signup> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       // get started text
-                      Text(
+                      const Text(
                         'Enter information',
                         style: TextStyle(
                           fontSize: 30.0,
@@ -57,6 +68,10 @@ class _Signup extends State<Signup> {
                       ),
                       // full name
                       TextFormField(
+                        controller: nameController,
+                        onTapOutside: (event) {
+                          FocusScope.of(context).requestFocus(FocusNode());
+                        },
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please enter Full name';
@@ -88,6 +103,10 @@ class _Signup extends State<Signup> {
                       ),
                       // email
                       TextFormField(
+                        controller: emailController,
+                        onTapOutside: (event) {
+                          FocusScope.of(context).requestFocus(FocusNode());
+                        },
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please enter Email';
@@ -119,6 +138,10 @@ class _Signup extends State<Signup> {
                       ),
                       // password
                       TextFormField(
+                        controller: passwordController,
+                        onTapOutside: (event) {
+                          FocusScope.of(context).requestFocus(FocusNode());
+                        },
                         obscureText: true,
                         obscuringCharacter: '*',
                         validator: (value) {
@@ -168,7 +191,7 @@ class _Signup extends State<Signup> {
                               color: Colors.black45,
                             ),
                           ),
-                          Text(
+                          const Text(
                             'Personal data',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
@@ -184,14 +207,28 @@ class _Signup extends State<Signup> {
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             if (_formSignupKey.currentState!.validate() &&
                                 agreePersonalData) {
-                              // ScaffoldMessenger.of(context).showSnackBar(
-                              //   const SnackBar(
-                              //     content: Text('Processing Data'),
-                              //   ),
-                              // );
+                              setState(() {
+                                loadingVisible = true;
+                              });
+                              dynamic result =
+                                  await _databaseService.registerUser(
+                                      nameController.text,
+                                      emailController.text,
+                                      passwordController.text);
+                              // if (result == null){
+                              if (result is! CustomUser) {
+                                setState(() {
+                                  loadingVisible = false;
+                                });
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        behavior: SnackBarBehavior.floating,
+                                        duration: Duration(seconds: 4),
+                                        content: Text("${result}")));
+                              }
                               Navigator.pushNamedAndRemoveUntil(
                                   context, '/nav', (route) => false);
                             } else if (!agreePersonalData) {
@@ -273,7 +310,7 @@ class _Signup extends State<Signup> {
                                 ),
                               );
                             },
-                            child: Text(
+                            child: const Text(
                               'Sign in',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
@@ -285,6 +322,12 @@ class _Signup extends State<Signup> {
                       ),
                       const SizedBox(
                         height: 20.0,
+                      ),
+                      Visibility(
+                        visible: loadingVisible,
+                        child: SpinKitWave(
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
                       ),
                     ],
                   ),

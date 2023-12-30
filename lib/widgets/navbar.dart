@@ -3,7 +3,8 @@ import '../pages/home.dart';
 import '../pages/history.dart';
 
 class Navbar extends StatefulWidget {
-  const Navbar({super.key});
+  final String uid;
+  const Navbar(this.uid,{super.key});
 
   @override
   State<Navbar> createState() => _NavbarState();
