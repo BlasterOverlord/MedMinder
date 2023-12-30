@@ -3,9 +3,9 @@ import 'package:icons_plus/icons_plus.dart';
 import 'package:medminder/auth/signup.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:medminder/database/databaseService.dart';
-import '../widgets/custom.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
+import '../widgets/custom.dart';
 
 class Signin extends StatefulWidget {
   final togglePage;
@@ -62,19 +62,9 @@ class _Signin extends State<Signin> {
                       ),
                       TextFormField(
                         controller: emailController,
-                        onTapOutside: (event) {
-                          FocusScope.of(context).requestFocus(FocusNode());
-                        },
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please enter Email';
-                          }
-
-                          if (!value.contains('@')) {
-                            return 'Invalid email format';
-                          }
-                          if (!value.contains('.')) {
-                            return 'Invalid email format';
                           }
                           return null;
                         },
