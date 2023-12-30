@@ -111,13 +111,6 @@ class _Signup extends State<Signup> {
                           if (value == null || value.isEmpty) {
                             return 'Please enter Email';
                           }
-                          if (!value.contains('@')) {
-                            return 'Invalid email format';
-                          }
-                          if (!value.contains('.')) {
-                            return 'Invalid email format';
-                          }
-                          return null;
                         },
                         decoration: InputDecoration(
                           label: const Text('Email'),
