@@ -111,6 +111,7 @@ class _Signup extends State<Signup> {
                           if (value == null || value.isEmpty) {
                             return 'Please enter Email';
                           }
+                          return null;
                         },
                         decoration: InputDecoration(
                           label: const Text('Email'),
