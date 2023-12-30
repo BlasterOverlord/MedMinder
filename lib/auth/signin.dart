@@ -1,18 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:icons_plus/icons_plus.dart';
-import 'package:medminder/screens/signup.dart';
+import 'package:medminder/auth/signup.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:medminder/database/databaseService.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import '../widgets/custom.dart';
 
 class Signin extends StatefulWidget {
-  const Signin({super.key});
+  final togglePage;
+  const Signin({super.key, this.togglePage});
 
   @override
   State<Signin> createState() => _Signin();
 }
 
 class _Signin extends State<Signin> {
+  var emailController = TextEditingController();
+  var passwordController = TextEditingController();
   final _formSignInKey = GlobalKey<FormState>();
+  bool loadingVisible = false;
   bool rememberPassword = true;
   @override
   Widget build(BuildContext context) {
@@ -42,7 +49,7 @@ class _Signin extends State<Signin> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text(
+                      const Text(
                         'Welcome',
                         style: TextStyle(
                           fontSize: 30.0,
@@ -54,15 +61,17 @@ class _Signin extends State<Signin> {
                         height: 40.0,
                       ),
                       TextFormField(
+                        controller: emailController,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please enter Email';
                           }
                           return null;
                         },
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
                         decoration: InputDecoration(
-                          label: const Text('Username'),
-                          hintText: 'Enter Username',
+                          label: const Text('Email'),
+                          hintText: 'Enter Email',
                           hintStyle: const TextStyle(
                             color: Colors.black26,
                           ),
@@ -84,6 +93,7 @@ class _Signin extends State<Signin> {
                         height: 25.0,
                       ),
                       TextFormField(
+                        controller: passwordController,
                         obscureText: true,
                         obscuringCharacter: '*',
                         validator: (value) {
@@ -92,6 +102,7 @@ class _Signin extends State<Signin> {
                           }
                           return null;
                         },
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
                         decoration: InputDecoration(
                           label: const Text('Password'),
                           hintText: 'Enter Password',
@@ -137,7 +148,7 @@ class _Signin extends State<Signin> {
                             ],
                           ),
                           GestureDetector(
-                            child: Text(
+                            child: const Text(
                               'Forget password',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
@@ -153,14 +164,25 @@ class _Signin extends State<Signin> {
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             if (_formSignInKey.currentState!.validate() &&
                                 rememberPassword) {
-                              // ScaffoldMessenger.of(context).showSnackBar(
-                              //   const SnackBar(
-                              //     content: Text('Processing Data'),
-                              //   ),
-                              // );
+                              setState(() {
+                                loadingVisible = true;
+                              });
+                              dynamic result = await DatabaseService()
+                                  .loginUser(emailController.text,
+                                      passwordController.text);
+                              if (result is! UserCredential) {
+                                setState(() {
+                                  loadingVisible = false;
+                                });
+                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                    behavior: SnackBarBehavior.floating,
+                                    // content: Text("Login falied, try again !")
+                                    content: Text("$result")));
+                              }
+
                               Navigator.pushNamedAndRemoveUntil(
                                   context, '/nav', (route) => false);
                             } else if (!rememberPassword) {
@@ -240,7 +262,7 @@ class _Signin extends State<Signin> {
                                 ),
                               );
                             },
-                            child: Text(
+                            child: const Text(
                               'Sign up',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
