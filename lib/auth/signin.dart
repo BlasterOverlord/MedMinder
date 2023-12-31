@@ -3,8 +3,6 @@ import 'package:icons_plus/icons_plus.dart';
 import 'package:medminder/auth/signup.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:medminder/database/databaseService.dart';
-
-
 import '../widgets/custom.dart';
 
 class Signin extends StatefulWidget {
