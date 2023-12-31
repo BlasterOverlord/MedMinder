@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:medminder/auth/firstscreen.dart';
 import 'widgets/navbar.dart';
+import 'package:medminder/auth/authListener.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-import 'package:medminder/auth/authListener.dart';
-
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
