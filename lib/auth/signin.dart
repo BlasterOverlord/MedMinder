@@ -4,9 +4,13 @@ import 'package:medminder/auth/signup.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:medminder/database/databaseService.dart';
 import '../widgets/custom.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+
+
 class Signin extends StatefulWidget {
   final togglePage;
   const Signin({super.key, this.togglePage});
+
   @override
   State<Signin> createState() => _Signin();
 }
