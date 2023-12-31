@@ -62,9 +62,19 @@ class _Signin extends State<Signin> {
                       ),
                       TextFormField(
                         controller: emailController,
+                        onTapOutside: (event) {
+                          FocusScope.of(context).requestFocus(FocusNode());
+                        },
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please enter Email';
+                          }
+
+                          if (!value.contains('@')) {
+                            return 'Invalid email format';
+                          }
+                          if (!value.contains('.')) {
+                            return 'Invalid email format';
                           }
                           return null;
                         },
