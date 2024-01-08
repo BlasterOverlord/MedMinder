@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:medminder/auth/firstscreen.dart';
+import 'package:medminder/pages/add_medicine/add_medicine.dart';
 import 'widgets/navbar.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -40,6 +41,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const Firstscreen(),
         '/nav': (context) => const Navbar(''),
+        '/add': (context) => const AddMedicine(),
       },
       debugShowCheckedModeBanner: false,
     );
