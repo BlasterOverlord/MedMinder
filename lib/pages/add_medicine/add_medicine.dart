@@ -1,18 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:medminder/pages/add_medicine/date_buttons.dart';
 import 'package:medminder/pages/add_medicine/generate_med_types.dart';
+import 'package:medminder/pages/add_medicine/time_buttons.dart';
 
 class AddMedicine extends StatefulWidget {
   const AddMedicine({super.key});
 
   @override
-  State<AddMedicine> createState() => _AddMedicineState();
+  State<AddMedicine> createState() => AddMedicineState();
 }
 
-class _AddMedicineState extends State<AddMedicine> {
+class AddMedicineState extends State<AddMedicine> {
   final formKey = GlobalKey<FormState>();
   var nameController = TextEditingController();
   var amountController = TextEditingController();
+  DateTime startDate = DateTime.now();
+  DateTime endDate = DateTime.now();
+  List<TimeOfDay> times = [];
 
   @override
   Widget build(BuildContext context) {
@@ -72,6 +77,23 @@ class _AddMedicineState extends State<AddMedicine> {
                   textInputAction: TextInputAction.next,
                 ),
                 const SizedBox(height: 25),
+
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "Duration",
+                    style: theme.textTheme.titleMedium,
+                  ),
+                ),
+                const SizedBox(height: 12),
+
+                // DATE PICKER!!!
+                DatePickerButtons(
+                  onStartChanged: (pickedDate) => startDate = pickedDate,
+                  onEndChanged: (pickedDate) => endDate = pickedDate,
+                ),
+                const SizedBox(height: 25),
+
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
@@ -80,7 +102,24 @@ class _AddMedicineState extends State<AddMedicine> {
                   ),
                 ),
                 const SizedBox(height: 12),
+
+                // TYPE OF MEDS!!!
                 const GenerateMedTypes(),
+                const SizedBox(height: 20),
+
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "Time",
+                    style: theme.textTheme.titleMedium,
+                  ),
+                ),
+                const SizedBox(height: 12),
+
+                // TIME PICKER!!!
+                TimePickerButtons(
+                  onTimeChanged: (selectedTimes) => times = selectedTimes,
+                ),
               ],
             ),
           ),
