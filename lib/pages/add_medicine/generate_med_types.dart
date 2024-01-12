@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:medminder/model/medicine_type.dart';
 
 class GenerateMedTypes extends StatefulWidget {
-  const GenerateMedTypes({super.key});
+  final Function(MedicineType) onTypeChanged;
+  const GenerateMedTypes({super.key, required this.onTypeChanged});
 
   @override
   State<GenerateMedTypes> createState() => _GenerateMedTypesState();
@@ -33,7 +34,8 @@ class _GenerateMedTypesState extends State<GenerateMedTypes> {
                 for (var element in medicineTypes) {
                   element.isChoose = false;
                 }
-                medicineTypes[index].toggleChoose();
+                medicineTypes[index].isChoose = true;
+                widget.onTypeChanged(medicineTypes[index]);
               });
             },
             child: SizedBox(
