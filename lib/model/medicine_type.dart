@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 
 class MedicineType {
   String name;
-  Widget image;
+  String imgPath;
   bool isChoose;
 
-  MedicineType(this.name, this.image, this.isChoose);
+  MedicineType(this.name, this.imgPath, this.isChoose);
 
-  void toggleChoose() {
-    isChoose = !isChoose;
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'image': imgPath
+    };
   }
 }

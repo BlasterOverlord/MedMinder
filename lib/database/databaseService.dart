@@ -1,5 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:medminder/model/medicine_type.dart';
+import 'package:medminder/model/medicine.dart';
 import 'package:medminder/model/user.dart';
 
 class DatabaseService {
@@ -9,6 +12,9 @@ class DatabaseService {
   // firestore collection reference
   final CollectionReference _userCollection =
       FirebaseFirestore.instance.collection('users');
+
+  final CollectionReference medicineCollection =
+      FirebaseFirestore.instance.collection('medicine');
 
   // create a new document for the user with the uid
   Future createUserDoc(String uid, String name, String email) async {
@@ -62,5 +68,29 @@ class DatabaseService {
     } catch (e) {
       print(e.toString());
     }
+  }
+
+  Future createMedicine(
+      {required String uid,
+      required String name,
+      String? amount,
+      required Timestamp? startDate,
+      required Timestamp? endDate,
+      required List<Timestamp> times,
+      required Map<String,dynamic>? medType}) async {
+    final docMed = medicineCollection.doc();
+    final Medicine med = Medicine(
+      id: docMed.id,
+      uid: uid,
+      name: name,
+      amount: amount,
+      startDate: startDate,
+      endDate: endDate,
+      times: times,
+      medType: medType,
+    );
+    final jsonMed = med.toJson();
+
+    return await docMed.set(jsonMed);
   }
 }
