@@ -4,19 +4,24 @@ import '../pages/history.dart';
 
 class Navbar extends StatefulWidget {
   final String uid;
-  const Navbar(this.uid,{super.key});
+  const Navbar(this.uid, {super.key});
 
   @override
   State<Navbar> createState() => _NavbarState();
 }
 
 class _NavbarState extends State<Navbar> {
-  // add pages here brothers
-  List<Widget> pages = [
-    const History(),
-    const Home(),
-    const Placeholder(),
-  ];
+  List<Widget> pages = [];
+
+  @override
+  void initState() {
+    super.initState();
+    pages = [
+      const History(),
+      Home(uid: widget.uid),
+      const Placeholder(),
+    ];
+  }
 
   int currentPageIndex = 1;
   @override

@@ -11,12 +11,12 @@ class GenerateMedTypes extends StatefulWidget {
 
 class _GenerateMedTypesState extends State<GenerateMedTypes> {
   List<MedicineType> medicineTypes = [
-    MedicineType("Syrup", Image.asset("assets/medicines/syrup.png"), true),
-    MedicineType("Pill", Image.asset("assets/medicines/pill.png"), false),
-    MedicineType("Drops", Image.asset("assets/medicines/drops.png"), false),
-    MedicineType("Cream", Image.asset("assets/medicines/cream.png"), false),
+    MedicineType("Syrup", "assets/medicines/syrup.png", true),
+    MedicineType("Pill", "assets/medicines/pill.png", false),
+    MedicineType("Drops", "assets/medicines/drops.png", false),
+    MedicineType("Cream", "assets/medicines/cream.png", false),
     MedicineType(
-        "Injection", Image.asset("assets/medicines/syringe.png"), false),
+        "Injection", "assets/medicines/syringe.png", false),
   ];
 
   @override
@@ -53,7 +53,7 @@ class _GenerateMedTypesState extends State<GenerateMedTypes> {
                     SizedBox(
                       height: 50,
                       width: 50,
-                      child: medicineTypes[index].image,
+                      child: Image.asset(medicineTypes[index].imgPath),
                     ),
                     const SizedBox(height: 7),
                     Text(

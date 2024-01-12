@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:medminder/model/helper_functions.dart';
 
 class TimePickerButtons extends StatefulWidget {
-  final Function(List<TimeOfDay>) onTimeChanged;
+  final Function(List<DateTime>) onTimeChanged;
 
   const TimePickerButtons({super.key, required this.onTimeChanged});
 
@@ -11,7 +11,7 @@ class TimePickerButtons extends StatefulWidget {
 }
 
 class _TimePickerButtonsState extends State<TimePickerButtons> {
-  List<TimeOfDay> selectedTimes = [];
+  List<DateTime> selectedTimes = [];
 
   Future selectTime(BuildContext context) async {
     final TimeOfDay? pickedTime = await showTimePicker(
@@ -20,7 +20,8 @@ class _TimePickerButtonsState extends State<TimePickerButtons> {
     );
     if (pickedTime != null) {
       setState(() {
-        selectedTimes.add(pickedTime);
+        DateTime time = timeofDaytoDateTime(pickedTime);
+        selectedTimes.add(time);
         widget.onTimeChanged(selectedTimes);
       });
     }
@@ -45,7 +46,7 @@ class _TimePickerButtonsState extends State<TimePickerButtons> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(25),
                   ),
-                  label: Text(formatTimeOfDay(time)),
+                  label: Text(formatTime(time)),
                   onDeleted: () {
                     setState(() {
                       selectedTimes.remove(time);

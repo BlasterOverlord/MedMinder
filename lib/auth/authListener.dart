@@ -21,10 +21,10 @@ class AuthListener extends StatelessWidget {
       builder: (context, snapshot) {
          if (snapshot.hasData) {
           final result = snapshot.data;
-          // print("result:: ${result}");
+          print("result:: ${result?.uid}");
           return Navbar(result!.uid);
         } else {
-          return const Authentication();
+          return const Firstscreen();
         }
       }
     );
