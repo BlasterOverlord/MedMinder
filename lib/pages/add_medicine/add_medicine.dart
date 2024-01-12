@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:medminder/pages/add_medicine/date_buttons.dart';
 import 'package:medminder/pages/add_medicine/generate_med_types.dart';
 import 'package:medminder/pages/add_medicine/time_buttons.dart';
+import 'package:medminder/model/medicine_type.dart';
 
 class AddMedicine extends StatefulWidget {
   const AddMedicine({super.key});
@@ -15,9 +16,10 @@ class AddMedicineState extends State<AddMedicine> {
   final formKey = GlobalKey<FormState>();
   var nameController = TextEditingController();
   var amountController = TextEditingController();
-  DateTime startDate = DateTime.now();
-  DateTime endDate = DateTime.now();
+  DateTime? startDate;
+  DateTime? endDate;
   List<TimeOfDay> times = [];
+  MedicineType? medType;
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +42,7 @@ class AddMedicineState extends State<AddMedicine> {
                 TextFormField(
                   controller: nameController,
                   validator: (value) {
-                    if (value == null || value.isEmpty) {
+                    if (value == null || value.trim().isEmpty) {
                       return 'Please enter a medicine name';
                     }
                     return null;
@@ -104,7 +106,9 @@ class AddMedicineState extends State<AddMedicine> {
                 const SizedBox(height: 12),
 
                 // TYPE OF MEDS!!!
-                const GenerateMedTypes(),
+                GenerateMedTypes(
+                  onTypeChanged: (med) => medType = med,
+                ),
                 const SizedBox(height: 20),
 
                 Align(
@@ -124,6 +128,57 @@ class AddMedicineState extends State<AddMedicine> {
             ),
           ),
         ),
+      ),
+
+      // SAVE BUTTON!!!
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          if (startDate == null || endDate == null) {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: const Text('Duration Not Set!'),
+                  content: const Text(
+                      'Please make sure you set a start date and an end date for your medicine.'),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text('OK'),
+                    ),
+                  ],
+                );
+              },
+            );
+          } else if (times.isEmpty) {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: const Text('Time Not Set!'),
+                  content: const Text(
+                      'Please make sure you add a time for your medicine.'),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text('OK'),
+                    ),
+                  ],
+                );
+              },
+            );
+          } else {
+            if (formKey.currentState!.validate()) {
+              Navigator.pop(context);
+            }
+          }
+        },
+        label: const Text('save'),
+        icon: const Icon(Icons.save_rounded),
       ),
     );
   }
