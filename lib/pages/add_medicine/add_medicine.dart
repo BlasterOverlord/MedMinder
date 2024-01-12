@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:medminder/database/databaseService.dart';
 import 'package:medminder/pages/add_medicine/date_buttons.dart';
 import 'package:medminder/pages/add_medicine/generate_med_types.dart';
 import 'package:medminder/pages/add_medicine/time_buttons.dart';
@@ -18,11 +21,22 @@ class AddMedicineState extends State<AddMedicine> {
   var amountController = TextEditingController();
   DateTime? startDate;
   DateTime? endDate;
-  List<TimeOfDay> times = [];
-  MedicineType? medType;
+  List<DateTime> times = [];
+  MedicineType? medType =
+      MedicineType("Syrup", "assets/medicines/syrup.png", true);
+
+  List<Timestamp> convertToTimestampList(List<DateTime> times) {
+    List<Timestamp> ts = [];
+    for (var time in times) {
+      ts.add(Timestamp.fromDate(time));
+    }
+    return ts;
+  }
 
   @override
   Widget build(BuildContext context) {
+    //final String uid = ModalRoute.of(context)!.settings.arguments as String;
+    final FirebaseAuth auth = FirebaseAuth.instance;
     var theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
@@ -132,7 +146,7 @@ class AddMedicineState extends State<AddMedicine> {
 
       // SAVE BUTTON!!!
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
+        onPressed: () async {
           if (startDate == null || endDate == null) {
             showDialog(
               context: context,
@@ -173,7 +187,42 @@ class AddMedicineState extends State<AddMedicine> {
             );
           } else {
             if (formKey.currentState!.validate()) {
-              Navigator.pop(context);
+              try {
+                await DatabaseService().createMedicine(
+                  uid: auth.currentUser!.uid,
+                  name: nameController.text,
+                  amount: amountController.text,
+                  startDate: Timestamp.fromDate(startDate!),
+                  endDate: Timestamp.fromDate(endDate!),
+                  times: convertToTimestampList(times),
+                  medType: medType?.toJson(),
+                );
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('${nameController.text} added successfully!'),
+                    behavior: SnackBarBehavior.floating,
+                    duration: const Duration(seconds: 3),
+                  ),
+                );
+              } catch (e) {
+                print(e);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      'Failed to add the medicine: $e',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    behavior: SnackBarBehavior.floating,
+                    duration: const Duration(seconds: 3),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+              } finally {
+                Navigator.pop(context);
+              }
             }
           }
         },
