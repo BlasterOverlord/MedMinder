@@ -30,7 +30,9 @@ class Home extends StatelessWidget {
         shape: const CircleBorder(),
         elevation: 12.0,
         child: const Icon(Icons.add),
-        onPressed: () {},
+        onPressed: () {
+          Navigator.pushNamed(context, '/add');
+        },
       ),
     );
   }
