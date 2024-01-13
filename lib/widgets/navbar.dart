@@ -12,17 +12,12 @@ class Navbar extends StatefulWidget {
 }
 
 class _NavbarState extends State<Navbar> {
-  List<Widget> pages = [];
-
-  @override
-  void initState() {
-    super.initState();
-    pages = [
-      const History(),
-      Home(uid: widget.uid),
-      ProfileSettingsPage(),
-    ];
-  }
+  // add your pages here brothers
+  List<Widget> pages = [
+    const History(),
+    const Home(),
+    const Placeholder(),
+  ];
 
   int currentPageIndex = 1;
   @override

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:medminder/model/medicine_time.dart';
 import 'package:medminder/model/medicine_type.dart';
 import 'package:medminder/model/medicine.dart';
 import 'package:medminder/model/user.dart';
@@ -77,7 +78,7 @@ class DatabaseService {
       required Timestamp? startDate,
       required Timestamp? endDate,
       required List<Timestamp> times,
-      required Map<String,dynamic>? medType}) async {
+      required Map<String, dynamic>? medType}) async {
     final docMed = medicineCollection.doc();
     final Medicine med = Medicine(
       id: docMed.id,
@@ -92,5 +93,56 @@ class DatabaseService {
     final jsonMed = med.toJson();
 
     return await docMed.set(jsonMed);
+  }
+
+  List<MedicineTime> medListFromSnapshot(
+      QuerySnapshot snapshot, DateTime selectedDate) {
+    List<MedicineTime> allMedicineTimes = [];
+    try {
+      List<Medicine> medList = snapshot.docs
+          .map((doc) => Medicine(
+                id: doc.id,
+                uid: doc.get('uid'),
+                name: doc.get('name'),
+                amount: doc.get('amount'),
+                startDate: doc.get('startDate'),
+                endDate: doc.get('endDate'),
+                times: List<Timestamp>.from(doc.get('times')),
+                medType: doc.get('medType'),
+              ))
+          .toList();
+
+      for (var med in medList) {
+        if ((selectedDate.isAtSameMomentAs(med.startDate!.toDate()) ||
+                selectedDate.isAfter(med.startDate!.toDate())) &&
+            (selectedDate.isAtSameMomentAs(med.endDate!.toDate()) ||
+                selectedDate.isBefore(med.endDate!.toDate()))) {
+          for (var time in med.times) {
+            DateTime medTime = time.toDate();
+            DateTime newMedTime = DateTime(
+              selectedDate.year,
+              selectedDate.month,
+              selectedDate.day,
+              medTime.hour,
+              medTime.minute,
+            );
+            allMedicineTimes.add(MedicineTime(med, newMedTime));
+          }
+        }
+      }
+    } catch (e) {
+      print(e);
+    } finally {
+      allMedicineTimes.sort((a, b) => a.time.compareTo(b.time));
+      return allMedicineTimes;
+    }
+  }
+
+  Stream<List<MedicineTime>> getMedicineTimesByUserID(
+      String uid, DateTime selectedDate) {
+    return medicineCollection
+        .where('uid', isEqualTo: uid)
+        .snapshots()
+        .map((snapshot) => medListFromSnapshot(snapshot, selectedDate));
   }
 }

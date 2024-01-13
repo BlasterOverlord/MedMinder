@@ -1,6 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
-import 'package:medminder/model/medicine_type.dart';
 
 class Medicine {
   String? id;
@@ -24,13 +22,28 @@ class Medicine {
   });
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'uid': uid,
-        'name': name,
-        'amount': amount,
-        'startDate': startDate,
-        'endDate': endDate,
-        'times': times,
-        'medType': medType,
-      };
+      'id': id,
+      'uid': uid,
+      'name': name,
+      'amount': amount,
+      'startDate': startDate,
+      'endDate': endDate,
+      'times': times,
+      'medType': medType,
+    };
+
+
+  static Medicine fromJson(Map<String, dynamic> json) => Medicine(
+      id: json['id'],
+      uid: json['uid'],
+      name: json['name'],
+      amount: json['amount'],
+      startDate: json['startDate'],
+      endDate: json['endDate'],
+      times: List<Timestamp>.from(json['times']),
+      medType: json['medType'],
+    );
 }
+
+
+
