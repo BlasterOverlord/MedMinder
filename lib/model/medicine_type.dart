@@ -5,12 +5,9 @@ class MedicineType {
   String imgPath;
   bool isChoose;
 
-  MedicineType(this.name, this.imgPath, this.isChoose);
+  MedicineType(this.name, this.imgPath, [this.isChoose = false]);
 
   Map<String, dynamic> toJson() {
-    return {
-      'name': name,
-      'image': imgPath
-    };
+    return {'name': name, 'image': imgPath};
   }
 }
