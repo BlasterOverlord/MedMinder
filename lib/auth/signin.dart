@@ -192,9 +192,17 @@ class _Signin extends State<Signin> {
                                     // content: Text("Login falied, try again !")
                                     content: Text("$result")));
                               }
+
+
+                              else{
+                                Navigator.pushNamedAndRemoveUntil(
+                                    context, '/nav', (route) => false);
+                              }
+
                               
                               Navigator.pushNamedAndRemoveUntil(
                                   context, '/nav', (route) => false);
+
                                   
                             } else if (!rememberPassword) {
                               ScaffoldMessenger.of(context).showSnackBar(
