@@ -16,7 +16,7 @@ class _NavbarState extends State<Navbar> {
   List<Widget> pages = [
     const History(),
     const Home(),
-    const Placeholder(),
+    ProfileSettingsPage(),
   ];
 
   int currentPageIndex = 1;

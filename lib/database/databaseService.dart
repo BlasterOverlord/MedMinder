@@ -112,6 +112,7 @@ class DatabaseService {
               ))
           .toList();
 
+      print('Hour: ${selectedDate.hour}  Min: ${selectedDate.minute}');
       for (var med in medList) {
         if ((selectedDate.isAtSameMomentAs(med.startDate!.toDate()) ||
                 selectedDate.isAfter(med.startDate!.toDate())) &&
