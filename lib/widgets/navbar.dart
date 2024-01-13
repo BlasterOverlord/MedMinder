@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:medminder/pages/profile.dart';
 import '../pages/home.dart';
 import '../pages/history.dart';
 
@@ -19,7 +20,7 @@ class _NavbarState extends State<Navbar> {
     pages = [
       const History(),
       Home(uid: widget.uid),
-      const Placeholder(),
+      ProfileSettingsPage(),
     ];
   }
 
