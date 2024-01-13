@@ -33,34 +33,36 @@ class _UpcomingMedsState extends State<UpcomingMeds> {
         } else if (snapshot.data!.isEmpty) {
           return const Text('No upcoming medicines');
         } else {
-          return ListView.builder(
-            shrinkWrap: true,
-            itemCount: snapshot.data?.length,
-            itemBuilder: (context, index) {
-              MedicineTime medTime = snapshot.data![index];
-              return ListTile(
-                leading: Image.asset(
-                  medTime.medicine.medType?['image'],
-                  width: 50,
-                  height: 40,
-                ),
-                title: Text(medTime.medicine.name ?? 'No data found'),
-                trailing: Text(formatTime(medTime.time)),
-                subtitle: Row(
-                  children: [
-                    Text(
-                      medTime.medicine.amount ?? '',
-                      style: Theme.of(context).textTheme.labelSmall,
-                    ),
-                    const SizedBox(width: 5),
-                    Text(
-                      medTime.medicine.medType?['name'],
-                      style: Theme.of(context).textTheme.labelSmall,
-                    ),
-                  ],
-                ),
-              );
-            },
+          return Expanded(
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: snapshot.data?.length,
+              itemBuilder: (context, index) {
+                MedicineTime medTime = snapshot.data![index];
+                return ListTile(
+                  leading: Image.asset(
+                    medTime.medicine.medType?['image'],
+                    width: 50,
+                    height: 40,
+                  ),
+                  title: Text(medTime.medicine.name ?? 'No data found'),
+                  trailing: Text(formatTime(medTime.time)),
+                  subtitle: Row(
+                    children: [
+                      Text(
+                        medTime.medicine.amount ?? '',
+                        style: Theme.of(context).textTheme.labelSmall,
+                      ),
+                      const SizedBox(width: 5),
+                      Text(
+                        medTime.medicine.medType?['name'],
+                        style: Theme.of(context).textTheme.labelSmall,
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
           );
         }
       },
