@@ -111,6 +111,13 @@ class _Signup extends State<Signup> {
                           if (value == null || value.isEmpty) {
                             return 'Please enter Email';
                           }
+
+                          if (!value.contains('@')) {
+                            return 'Invalid email format';
+                          }
+                          if (!value.contains('.')) {
+                            return 'Invalid email format';
+                          }
                           return null;
                         },
                         decoration: InputDecoration(
@@ -229,8 +236,10 @@ class _Signup extends State<Signup> {
                                         duration: Duration(seconds: 4),
                                         content: Text("${result}")));
                               }
-                              Navigator.pushNamedAndRemoveUntil(
-                                  context, '/nav', (route) => false);
+                              else{
+                                Navigator.pushNamedAndRemoveUntil(
+                                    context, '/nav', (route) => false);
+                              }
                             } else if (!agreePersonalData) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(

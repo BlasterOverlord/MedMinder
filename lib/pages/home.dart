@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import '../widgets/calendar.dart';
 
 class Home extends StatelessWidget {
-  const Home({super.key});
+  final String uid;
+  const Home({super.key, required this.uid});
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +31,9 @@ class Home extends StatelessWidget {
         shape: const CircleBorder(),
         elevation: 12.0,
         child: const Icon(Icons.add),
-        onPressed: () {},
+        onPressed: () {
+          Navigator.pushNamed(context, '/add', arguments: uid);
+        },
       ),
     );
   }
