@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:icons_plus/icons_plus.dart';
+import 'package:medminder/auth/forgetpass.dart';
 import 'package:medminder/auth/signup.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:medminder/database/databaseService.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-
 import '../widgets/custom.dart';
+
 
 class Signin extends StatefulWidget {
   final togglePage;
@@ -157,9 +158,17 @@ class _Signin extends State<Signin> {
                               ),
                             ],
                           ),
+
                           GestureDetector(
-                            child: const Text(
-                              'Forget password',
+                            onTap: () {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (e) => const ForgetPass(),
+                                ),
+                              );
+                            },
+                            child: const Text('Forgot password',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Colors.blue,
@@ -193,8 +202,10 @@ class _Signin extends State<Signin> {
                                     content: Text("$result")));
                               }
 
-                              Navigator.pushNamedAndRemoveUntil(
-                                  context, '/nav', (route) => false);
+                              else{
+                                Navigator.pushNamedAndRemoveUntil(
+                                    context, '/nav', (route) => false);
+                              }
                             } else if (!rememberPassword) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
