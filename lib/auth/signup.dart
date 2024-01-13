@@ -236,8 +236,10 @@ class _Signup extends State<Signup> {
                                         duration: Duration(seconds: 4),
                                         content: Text("${result}")));
                               }
-                              Navigator.pushNamedAndRemoveUntil(
-                                  context, '/nav', (route) => false);
+                              else{
+                                Navigator.pushNamedAndRemoveUntil(
+                                    context, '/nav', (route) => false);
+                              }
                             } else if (!agreePersonalData) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
