@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:medminder/auth/authListener.dart';
 import 'package:medminder/pages/add_medicine/add_medicine.dart';
+import 'package:medminder/pages/splash_screen.dart';
 import 'widgets/navbar.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'package:medminder/pages/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,8 +37,9 @@ class MyApp extends StatelessWidget {
           brightness: Brightness.dark,
         ),
       ),
-      initialRoute: '/',
+      initialRoute: '/splash',
       routes: {
+        '/splash': (context) => SplashScreen(),
         '/': (context) => const AuthListener(),
         '/nav': (context) => const Navbar(''),
         '/add': (context) => const AddMedicine(),
