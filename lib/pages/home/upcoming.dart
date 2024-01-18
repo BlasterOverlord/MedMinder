@@ -35,30 +35,41 @@ class _UpcomingMedsState extends State<UpcomingMeds> {
         } else {
           return Expanded(
             child: ListView.builder(
-              shrinkWrap: true,
+              // shrinkWrap: true,
               itemCount: snapshot.data?.length,
               itemBuilder: (context, index) {
                 MedicineTime medTime = snapshot.data![index];
-                return ListTile(
-                  leading: Image.asset(
-                    medTime.medicine.medType?['image'],
-                    width: 50,
-                    height: 40,
+                return Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Theme.of(context).colorScheme.inversePrimary,
+                      width: 2.0,
+                    ),
+                    borderRadius: BorderRadius.circular(30),
                   ),
-                  title: Text(medTime.medicine.name ?? 'No data found'),
-                  trailing: Text(formatTime(medTime.time)),
-                  subtitle: Row(
-                    children: [
-                      Text(
-                        medTime.medicine.amount ?? '',
-                        style: Theme.of(context).textTheme.labelSmall,
-                      ),
-                      const SizedBox(width: 5),
-                      Text(
-                        medTime.medicine.medType?['name'],
-                        style: Theme.of(context).textTheme.labelSmall,
-                      ),
-                    ],
+                  margin: const EdgeInsets.symmetric(vertical: 5),
+                  child: ListTile(
+                    enableFeedback: true,
+                    leading: Image.asset(
+                      medTime.medicine.medType?['image'],
+                      width: 50,
+                      height: 40,
+                    ),
+                    title: Text(medTime.medicine.name ?? 'No data found'),
+                    trailing: Text(formatTime(medTime.time)),
+                    subtitle: Row(
+                      children: [
+                        Text(
+                          medTime.medicine.amount ?? '',
+                          style: Theme.of(context).textTheme.labelSmall,
+                        ),
+                        const SizedBox(width: 5),
+                        Text(
+                          medTime.medicine.medType?['name'],
+                          style: Theme.of(context).textTheme.labelSmall,
+                        ),
+                      ],
+                    ),
                   ),
                 );
               },
