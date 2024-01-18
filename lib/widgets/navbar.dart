@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:medminder/pages/profile.dart';
-import '../pages/home.dart';
+import '../pages/home/home.dart';
 import '../pages/history.dart';
 
 class Navbar extends StatefulWidget {

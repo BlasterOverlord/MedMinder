@@ -98,45 +98,42 @@ class DatabaseService {
   List<MedicineTime> medListFromSnapshot(
       QuerySnapshot snapshot, DateTime selectedDate) {
     List<MedicineTime> allMedicineTimes = [];
-    try {
-      List<Medicine> medList = snapshot.docs
-          .map((doc) => Medicine(
-                id: doc.id,
-                uid: doc.get('uid'),
-                name: doc.get('name'),
-                amount: doc.get('amount'),
-                startDate: doc.get('startDate'),
-                endDate: doc.get('endDate'),
-                times: List<Timestamp>.from(doc.get('times')),
-                medType: doc.get('medType'),
-              ))
-          .toList();
 
-      print('Hour: ${selectedDate.hour}  Min: ${selectedDate.minute}');
-      for (var med in medList) {
-        if ((selectedDate.isAtSameMomentAs(med.startDate!.toDate()) ||
-                selectedDate.isAfter(med.startDate!.toDate())) &&
-            (selectedDate.isAtSameMomentAs(med.endDate!.toDate()) ||
-                selectedDate.isBefore(med.endDate!.toDate()))) {
-          for (var time in med.times) {
-            DateTime medTime = time.toDate();
-            DateTime newMedTime = DateTime(
-              selectedDate.year,
-              selectedDate.month,
-              selectedDate.day,
-              medTime.hour,
-              medTime.minute,
-            );
-            allMedicineTimes.add(MedicineTime(med, newMedTime));
-          }
+    List<Medicine> medList = snapshot.docs
+        .map((doc) => Medicine(
+              id: doc.id,
+              uid: doc.get('uid'),
+              name: doc.get('name'),
+              amount: doc.get('amount'),
+              startDate: doc.get('startDate'),
+              endDate: doc.get('endDate'),
+              times: List<Timestamp>.from(doc.get('times')),
+              medType: doc.get('medType'),
+            ))
+        .toList();
+
+    //print('Hour: ${selectedDate.hour}  Min: ${selectedDate.minute}');
+    for (var med in medList) {
+      if ((selectedDate.isAtSameMomentAs(med.startDate!.toDate()) ||
+              selectedDate.isAfter(med.startDate!.toDate())) &&
+          (selectedDate.isAtSameMomentAs(med.endDate!.toDate()) ||
+              selectedDate.isBefore(med.endDate!.toDate()))) {
+        for (var time in med.times) {
+          DateTime medTime = time.toDate();
+          DateTime newMedTime = DateTime(
+            selectedDate.year,
+            selectedDate.month,
+            selectedDate.day,
+            medTime.hour,
+            medTime.minute,
+          );
+          allMedicineTimes.add(MedicineTime(med, newMedTime));
         }
       }
-    } catch (e) {
-      print(e);
-    } finally {
-      allMedicineTimes.sort((a, b) => a.time.compareTo(b.time));
-      return allMedicineTimes;
     }
+
+    allMedicineTimes.sort((a, b) => a.time.compareTo(b.time));
+    return allMedicineTimes;
   }
 
   Stream<List<MedicineTime>> getMedicineTimesByUserID(
