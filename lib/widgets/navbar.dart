@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:medminder/pages/profile.dart';
-import '../pages/home.dart';
+import '../pages/home/home.dart';
 import '../pages/history.dart';
 
 class Navbar extends StatefulWidget {
@@ -12,17 +12,12 @@ class Navbar extends StatefulWidget {
 }
 
 class _NavbarState extends State<Navbar> {
-  List<Widget> pages = [];
-
-  @override
-  void initState() {
-    super.initState();
-    pages = [
-      const History(),
-      Home(uid: widget.uid),
-      ProfileSettingsPage(),
-    ];
-  }
+  // add your pages here brothers
+  List<Widget> pages = [
+    const History(),
+    const Home(),
+    ProfileSettingsPage(),
+  ];
 
   int currentPageIndex = 1;
   @override

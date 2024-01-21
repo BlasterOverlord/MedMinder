@@ -30,6 +30,7 @@ class _TimePickerButtonsState extends State<TimePickerButtons> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Align(
           alignment: Alignment.centerLeft,
@@ -59,14 +60,10 @@ class _TimePickerButtonsState extends State<TimePickerButtons> {
         ),
         const SizedBox(height: 16),
         SizedBox(
-          width: 180,
+          width: 150,
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.symmetric(vertical: 25),
-              textStyle:
-                  const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              backgroundColor: Theme.of(context).colorScheme.primary,
-              foregroundColor: Theme.of(context).colorScheme.onPrimary,
             ),
             onPressed: () => selectTime(context),
             child: const Text('Add Time (s)'),

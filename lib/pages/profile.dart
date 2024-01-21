@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:medminder/auth/firstscreen.dart';
 
 class ProfileSettingsPage extends StatefulWidget {
   @override
@@ -155,6 +156,32 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
                   TextStyle(color: Theme.of(context).colorScheme.onBackground),
             ),
             SizedBox(height: 32.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextButton(
+                  style: TextButton.styleFrom(
+                    backgroundColor: Colors.lightBlue[200],
+                  ),
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (e) => const Firstscreen(),
+                      ),
+                    );
+                  },
+
+                  child: Text(
+                    'Logout',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
       ),
