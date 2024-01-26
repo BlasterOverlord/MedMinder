@@ -81,10 +81,10 @@ class _UpcomingMedsState extends State<UpcomingMeds> {
                                           ),
                                           TextButton(
                                             onPressed: () async {
+                                              Navigator.pop(context);
                                               await DatabaseService()
                                                   .deleteMedicine(
                                                       medTime.medicine.id!);
-                                              Navigator.pop(context);
                                             },
                                             child: const Text('Delete'),
                                           ),

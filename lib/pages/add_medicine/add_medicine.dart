@@ -189,7 +189,8 @@ class AddMedicineState extends State<AddMedicine> {
                             name: nameController.text,
                             amount: amountController.text,
                             startDate: Timestamp.fromDate(startDate!),
-                            endDate: Timestamp.fromDate(endDate!),
+                            endDate: Timestamp.fromDate(
+                                endDate!.add(const Duration(days: 1))),
                             times: convertToTimestampList(times),
                             medType: medType?.toJson(),
                           );
