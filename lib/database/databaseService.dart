@@ -143,4 +143,9 @@ class DatabaseService {
         .snapshots()
         .map((snapshot) => medListFromSnapshot(snapshot, selectedDate));
   }
+
+  Future deleteMedicine(String id) async {
+    final docMed = medicineCollection.doc(id);
+    return await docMed.delete();
+  }
 }

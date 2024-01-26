@@ -35,7 +35,6 @@ class _UpcomingMedsState extends State<UpcomingMeds> {
         } else {
           return Expanded(
             child: ListView.builder(
-              // shrinkWrap: true,
               itemCount: snapshot.data?.length,
               itemBuilder: (context, index) {
                 MedicineTime medTime = snapshot.data![index];
@@ -56,7 +55,51 @@ class _UpcomingMedsState extends State<UpcomingMeds> {
                       height: 40,
                     ),
                     title: Text(medTime.medicine.name ?? 'No data found'),
-                    trailing: Text(formatTime(medTime.time)),
+                    trailing: ScrollConfiguration(
+                      behavior: ScrollConfiguration.of(context)
+                          .copyWith(scrollbars: false),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            Text(formatTime(medTime.time)),
+                            IconButton(
+                              onPressed: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        title:
+                                            const Text('Delete this medicine?'),
+                                        content: const Text(
+                                            'This will permanently delete the medicine!'),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: const Text('Cancel'),
+                                          ),
+                                          TextButton(
+                                            onPressed: () async {
+                                              await DatabaseService()
+                                                  .deleteMedicine(
+                                                      medTime.medicine.id!);
+                                              Navigator.pop(context);
+                                            },
+                                            child: const Text('Delete'),
+                                          ),
+                                        ],
+                                      );
+                                    });
+                              },
+                              icon: const Icon(Icons.delete),
+                              color: Colors.red,
+                              iconSize: 20,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                     subtitle: Row(
                       children: [
                         Text(
