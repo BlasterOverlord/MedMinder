@@ -2,11 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:medminder/database/databaseService.dart';
+import 'package:medminder/service/databaseService.dart';
 import 'package:medminder/pages/add_medicine/date_buttons.dart';
 import 'package:medminder/pages/add_medicine/generate_med_types.dart';
 import 'package:medminder/pages/add_medicine/time_buttons.dart';
 import 'package:medminder/model/medicine_type.dart';
+import 'package:medminder/service/notificationService.dart';
 
 class AddMedicine extends StatefulWidget {
   const AddMedicine({super.key});
@@ -138,96 +139,124 @@ class AddMedicineState extends State<AddMedicine> {
                 TimePickerButtons(
                   onTimeChanged: (selectedTimes) => times = selectedTimes,
                 ),
+                const SizedBox(height: 25),
+
+                // SAVE BUTTON!!!
+                ElevatedButton(
+                  onPressed: () async {
+                    if (startDate == null || endDate == null) {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text('Duration Not Set!'),
+                            content: const Text(
+                                'Please make sure you set a start date and an end date for your medicine.'),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: const Text('OK'),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    } else if (times.isEmpty) {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text('Time Not Set!'),
+                            content: const Text(
+                                'Please make sure you add a time for your medicine.'),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: const Text('OK'),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    } else {
+                      if (formKey.currentState!.validate()) {
+                        try {
+                          var notificationService = NotificationService();
+                          await DatabaseService().createMedicine(
+                            uid: auth.currentUser!.uid,
+                            name: nameController.text,
+                            amount: amountController.text,
+                            startDate: Timestamp.fromDate(startDate!),
+                            endDate: Timestamp.fromDate(
+                                endDate!.add(const Duration(days: 1))),
+                            times: convertToTimestampList(times),
+                            medType: medType?.toJson(),
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                  '${nameController.text} added successfully!'),
+                              behavior: SnackBarBehavior.floating,
+                              duration: const Duration(seconds: 3),
+                            ),
+                          );
+                          for (var time in times) {
+                            DateTime notificationTime = DateTime(
+                              startDate!.year,
+                              startDate!.month,
+                              startDate!.day,
+                              time.hour,
+                              time.minute,
+                              time.second,
+                            );
+                            await notificationService.scheduleNotification(
+                                nameController.text, notificationTime);
+                          }
+                        } catch (e) {
+                          print(e);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                'Failed to add the medicine: $e',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              behavior: SnackBarBehavior.floating,
+                              duration: const Duration(seconds: 3),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                        } finally {
+                          Navigator.pop(context);
+                        }
+                      }
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 25),
+                    textStyle: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold),
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                  ),
+                  child: const SizedBox(
+                    width: 180,
+                    child: Text(
+                      'Save',
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
         ),
-      ),
-
-      // SAVE BUTTON!!!
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () async {
-          if (startDate == null || endDate == null) {
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  title: const Text('Duration Not Set!'),
-                  content: const Text(
-                      'Please make sure you set a start date and an end date for your medicine.'),
-                  actions: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Text('OK'),
-                    ),
-                  ],
-                );
-              },
-            );
-          } else if (times.isEmpty) {
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  title: const Text('Time Not Set!'),
-                  content: const Text(
-                      'Please make sure you add a time for your medicine.'),
-                  actions: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Text('OK'),
-                    ),
-                  ],
-                );
-              },
-            );
-          } else {
-            if (formKey.currentState!.validate()) {
-              try {
-                await DatabaseService().createMedicine(
-                  uid: auth.currentUser!.uid,
-                  name: nameController.text,
-                  amount: amountController.text,
-                  startDate: Timestamp.fromDate(startDate!),
-                  endDate: Timestamp.fromDate(endDate!),
-                  times: convertToTimestampList(times),
-                  medType: medType?.toJson(),
-                );
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('${nameController.text} added successfully!'),
-                    behavior: SnackBarBehavior.floating,
-                    duration: const Duration(seconds: 3),
-                  ),
-                );
-              } catch (e) {
-                print(e);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                      'Failed to add the medicine: $e',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    behavior: SnackBarBehavior.floating,
-                    duration: const Duration(seconds: 3),
-                    backgroundColor: Colors.red,
-                  ),
-                );
-              } finally {
-                Navigator.pop(context);
-              }
-            }
-          }
-        },
-        label: const Text('save'),
-        icon: const Icon(Icons.save_rounded),
       ),
     );
   }

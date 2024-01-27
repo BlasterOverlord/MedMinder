@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:medminder/widgets/upcoming.dart';
-import '../widgets/calendar.dart';
+import 'package:medminder/pages/home/upcoming.dart';
+import 'calendar.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
