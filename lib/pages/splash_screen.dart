@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:medminder/auth/authListener.dart';
+
 
 class SplashScreen extends StatefulWidget{
   @override
@@ -17,19 +17,15 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
 
     Timer(Duration(seconds: 5), (){
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => AuthListener(),
-      ));
+      Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-      ),
-      extendBodyBehindAppBar: true,
+
       body: Stack(
         children: [
           Image.asset(
