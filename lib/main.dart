@@ -2,16 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:medminder/auth/authListener.dart';
 import 'package:medminder/pages/add_medicine/add_medicine.dart';
 import 'package:medminder/pages/splash_screen.dart';
+import 'package:medminder/service/notificationService.dart';
 import 'widgets/navbar.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-import 'package:medminder/pages/splash_screen.dart';
+import 'package:timezone/data/latest.dart' as tz;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await NotificationService.requestNotificationPermission();
+  await NotificationService().init();
+  tz.initializeTimeZones();
   runApp(const MyApp());
 }
 
