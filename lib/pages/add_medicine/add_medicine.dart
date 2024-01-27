@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:medminder/service/databaseService.dart';
 import 'package:medminder/pages/add_medicine/date_buttons.dart';
 import 'package:medminder/pages/add_medicine/generate_med_types.dart';
@@ -20,6 +21,7 @@ class AddMedicineState extends State<AddMedicine> {
   final formKey = GlobalKey<FormState>();
   var nameController = TextEditingController();
   var amountController = TextEditingController();
+  bool loadingVisible = false;
   DateTime? startDate;
   DateTime? endDate;
   List<DateTime> times = [];
@@ -186,6 +188,7 @@ class AddMedicineState extends State<AddMedicine> {
                       if (formKey.currentState!.validate()) {
                         try {
                           var notificationService = NotificationService();
+                          setState(() {});
                           await DatabaseService().createMedicine(
                             uid: auth.currentUser!.uid,
                             name: nameController.text,
@@ -251,6 +254,15 @@ class AddMedicineState extends State<AddMedicine> {
                       'Save',
                       textAlign: TextAlign.center,
                     ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 20.0,
+                ),
+                Visibility(
+                  visible: loadingVisible,
+                  child: SpinKitWave(
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
               ],

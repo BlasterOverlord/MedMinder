@@ -7,7 +7,6 @@ import 'package:medminder/service/databaseService.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import '../widgets/custom.dart';
 
-
 class Signin extends StatefulWidget {
   final togglePage;
   const Signin({super.key, this.togglePage});
@@ -158,7 +157,6 @@ class _Signin extends State<Signin> {
                               ),
                             ],
                           ),
-
                           GestureDetector(
                             onTap: () {
                               Navigator.pushReplacement(
@@ -168,7 +166,8 @@ class _Signin extends State<Signin> {
                                 ),
                               );
                             },
-                            child: const Text('Forgot password',
+                            child: const Text(
+                              'Forgot password',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Colors.blue,
@@ -200,9 +199,7 @@ class _Signin extends State<Signin> {
                                     behavior: SnackBarBehavior.floating,
                                     // content: Text("Login falied, try again !")
                                     content: Text("$result")));
-                              }
-
-                              else{
+                              } else {
                                 Navigator.pushNamedAndRemoveUntil(
                                     context, '/nav', (route) => false);
                               }
@@ -295,6 +292,12 @@ class _Signin extends State<Signin> {
                       ),
                       const SizedBox(
                         height: 20.0,
+                      ),
+                      Visibility(
+                        visible: loadingVisible,
+                        child: SpinKitWave(
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
                       ),
                     ],
                   ),

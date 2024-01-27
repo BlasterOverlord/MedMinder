@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:medminder/service/databaseService.dart';
 import 'package:medminder/model/helper_functions.dart';
 import 'package:medminder/model/medicine_time.dart';
@@ -25,13 +26,20 @@ class _UpcomingMedsState extends State<UpcomingMeds> {
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           print(snapshot.error);
-          return Text('Error: ${snapshot.error}');
+          return Center(child: Text('Error: ${snapshot.error}'));
         } else if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Text('Loading...');
+          return Center(
+            child: Visibility(
+              visible: true,
+              child: SpinKitWave(
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            ),
+          );
         } else if (snapshot.data == null) {
-          return const Text('No data found!');
+          return const Center(child: Text('No data found!'));
         } else if (snapshot.data!.isEmpty) {
-          return const Text('No upcoming medicines');
+          return const Center(child: Text('No upcoming medicines'));
         } else {
           return Expanded(
             child: ListView.builder(
