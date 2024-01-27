@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:medminder/auth/firstscreen.dart';
+import 'package:medminder/service/databaseService.dart';
 
 class ProfileSettingsPage extends StatefulWidget {
   @override
@@ -13,6 +15,7 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
   TextEditingController _genderController = TextEditingController();
   TextEditingController _weightController = TextEditingController();
   bool _isEditMode = false;
+  bool loadingVisible = false;
 
   @override
   Widget build(BuildContext context) {
@@ -161,26 +164,32 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
               children: [
                 TextButton(
                   style: TextButton.styleFrom(
-                    backgroundColor: Colors.lightBlue[200],
+                    backgroundColor: Colors.red,
                   ),
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (e) => const Firstscreen(),
-                      ),
-                    );
+                  onPressed: () async {
+                    setState(() {
+                      loadingVisible = true;
+                    });
+                    await DatabaseService().logoutUser();
                   },
-
                   child: Text(
                     'Logout',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      color: Colors.black,
+                      color: Colors.white,
                     ),
                   ),
                 ),
               ],
+            ),
+            const SizedBox(
+              height: 20.0,
+            ),
+            Visibility(
+              visible: loadingVisible,
+              child: SpinKitWave(
+                color: Theme.of(context).colorScheme.primary,
+              ),
             ),
           ],
         ),
