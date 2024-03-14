@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:medminder/auth/signin.dart';
 import 'package:medminder/model/user.dart';
-import 'package:medminder/service/databaseService.dart';
+import 'package:medminder/database/databaseService.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import '../widgets/custom.dart';

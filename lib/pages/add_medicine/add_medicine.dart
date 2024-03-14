@@ -2,13 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:medminder/service/databaseService.dart';
+import 'package:medminder/database/databaseService.dart';
 import 'package:medminder/pages/add_medicine/date_buttons.dart';
 import 'package:medminder/pages/add_medicine/generate_med_types.dart';
 import 'package:medminder/pages/add_medicine/time_buttons.dart';
 import 'package:medminder/model/medicine_type.dart';
-import 'package:medminder/service/notificationService.dart';
 
 class AddMedicine extends StatefulWidget {
   const AddMedicine({super.key});
@@ -187,8 +185,6 @@ class AddMedicineState extends State<AddMedicine> {
                     } else {
                       if (formKey.currentState!.validate()) {
                         try {
-                          var notificationService = NotificationService();
-                          setState(() {});
                           await DatabaseService().createMedicine(
                             uid: auth.currentUser!.uid,
                             name: nameController.text,
@@ -207,18 +203,6 @@ class AddMedicineState extends State<AddMedicine> {
                               duration: const Duration(seconds: 3),
                             ),
                           );
-                          for (var time in times) {
-                            DateTime notificationTime = DateTime(
-                              startDate!.year,
-                              startDate!.month,
-                              startDate!.day,
-                              time.hour,
-                              time.minute,
-                              time.second,
-                            );
-                            await notificationService.scheduleNotification(
-                                nameController.text, notificationTime);
-                          }
                         } catch (e) {
                           print(e);
                           ScaffoldMessenger.of(context).showSnackBar(

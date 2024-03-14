@@ -3,7 +3,7 @@ import 'package:icons_plus/icons_plus.dart';
 import 'package:medminder/auth/forgetpass.dart';
 import 'package:medminder/auth/signup.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:medminder/service/databaseService.dart';
+import 'package:medminder/database/databaseService.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import '../widgets/custom.dart';
 
