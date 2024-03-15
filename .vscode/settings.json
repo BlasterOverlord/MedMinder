@@ -1,4 +1,3 @@
 {
-  "cmake.sourceDirectory": "D:/flutterProjects/MedMinder/medminder/linux",
-  "java.configuration.updateBuildConfiguration": "interactive"
+    "cmake.sourceDirectory": "D:/flutterProjects/MedMinder/medminder/linux"
 }

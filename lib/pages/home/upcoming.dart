@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:medminder/service/databaseService.dart';
+import 'package:medminder/database/databaseService.dart';
 import 'package:medminder/model/helper_functions.dart';
 import 'package:medminder/model/medicine_time.dart';
 import 'package:medminder/model/medicine_type.dart';
